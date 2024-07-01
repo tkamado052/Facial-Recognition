@@ -26,7 +26,6 @@ $message = "";
 if (isset($_POST['submit'])) {
 
     $idNumber = $_POST['idNumber'];
-    $dissability = $_POST['dissability'];
     $firstName = $_POST['firstName'];
     $middleName = $_POST['middleName'];
     $surname = $_POST['surname'];
@@ -36,13 +35,17 @@ if (isset($_POST['submit'])) {
     $age = $_POST['age'];
     $sex = $_POST['sex'];
     $dateIssue = $_POST['dateIssue'];
+    $CfirstName = $_POST['CfirstName'];
+    $CmiddleName = $_POST['CmiddleName'];
+    $Csurname = $_POST['Csurname'];
+    $Csuffix = $_POST['Csuffix'];
+    $Cdob = $_POST['Cdob'];
+    $Cage = $_POST['Cage'];
+    $Csex = $_POST['Csex'];
     $password = $_POST['password'];
-    $parent = $_POST['parent'];
-    $contact = $_POST['contact'];
 
 
 $idNumberEncrypted = encryptthis($idNumber, $key);
-$disabilityEncrypted = encryptthis($dissability, $key);
 $firstNameEncrypted = encryptthis($firstName, $key);
 $middleNameEncrypted = encryptthis($middleName, $key);
 $surnameEncrypted = encryptthis($surname, $key);
@@ -52,8 +55,12 @@ $dobEncrypted = encryptthis($dob, $key);
 $ageEncrypted = encryptthis($age, $key);
 $sexEncrypted = encryptthis($sex, $key);
 $dateIDIssueEncrypted = encryptthis($dateIssue, $key);
-$parentEncrypted = encryptthis($parent, $key);
-$contactEncrypted = encryptthis($idcontact, $key);
+$childfirstNameEncrypted = encryptthis($CfirstName, $key);
+$childmiddleNameEncrypted = encryptthis($CmiddleName, $key);
+$childsurnameEncrypted = encryptthis($Csurname, $key);
+$childdobEncrypted = encryptthis($Cdob, $key);
+$childageEncrypted = encryptthis($Cage, $key);
+$childsexEncrypted = encryptthis($Csex, $key);
 $passwordEncrypted = password_hash($password, PASSWORD_DEFAULT);
 
 
@@ -96,7 +103,7 @@ $conn->close();
 </head>
 <body>
     <div class="container">
-        <h2>PWD Account Registration</h2>
+        <h2>Solo Parents Account Registration</h2>
         <p>Fields with * are required.</p>
         <form id="registrationForm" action="register.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <fieldset>
@@ -106,21 +113,6 @@ $conn->close();
                     <div class="column">
                         <label for="idNumber">*ID Number</label>
                         <input type="text" id="idNumber" name="idNumber" required>
-                    </div>
-                    <div class="column">
-                        <label for="dissability">*Type of Dissability</label>
-                        <select id="dissability" name="dissability" required>
-                            <option value="blank"> </option>
-                            <option value="visualy"> Visually Impared </option>
-                            <option value="hearing"> Hearing Impared </option>
-                            <option value="orthopedic"> Visually Impared </option>
-                            <option value="others"> Cleft Palate, Harelip</option>
-                            <option value="imp"> Improved Mental Patients </option>
-                            <option value="mr"> Mentally Retarted </option>
-                            <option value="autism"> Autism </option>
-                            <option value="deficit"> Attention Deficit Disorder</option>
-                            <option value="hyperactive"> Attention Deficit Hyperactive Disorder </option>
-                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -165,15 +157,37 @@ $conn->close();
                         <input type="date" id="dateIssue" name="dateIssue" required>
                     </div>
                 </div>
-                <legend>In Case of Emergency</legend>
+                <legend>Child Information</legend>
                 <div class="row">
                     <div class="column">
-                        <label for="parent">*Parent/Guardian</label>
-                        <input type="text" id="parent" name="parent" required>
+                        <label for="CfirstName">*First Name</label>
+                        <input type="text" id="CfirstName" name="CfirstName" required>
                     </div>
                     <div class="column">
-                        <label for="contact">*Contact Number</label>
-                        <input type="tel" id="contact" name="contact" pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}" required>
+                        <label for="CmiddleName">*Middle Name</label>
+                        <input type="text" id="CmiddleName" name="CmiddleName" required>
+                    </div>
+                    <div class="column">
+                        <label for="Csurname">*Surname</label>
+                        <input type="text" id="Csurname" name="Csurname" required>
+                    </div>
+                    <div class="column">
+                        <label for="Csuffix">Suffix</label>
+                        <input type="text" id="Csuffix" name="Csuffix">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <label for="Cdob">*Date of Birth</label>
+                        <input type="date" id="Cdob" name="Cdob" required>
+                    </div>
+                    <div class="column">
+                        <label for="Cage">*Age</label>
+                        <input type="number" id="Cage" name="Cage" required>
+                    </div>
+                    <div class="column">
+                        <label for="Csex">*Sex</label>
+                        <input type="text" id="Csex" name="Csex" required>
                     </div>
                 </div>
                 <div class="row">
