@@ -1,5 +1,5 @@
 <?php
-require '../admin/encryption_functions.php'; // Include the encryption functions
+date_default_timezone_set('America/New_York');
 
 $servername = "localhost";
 $username = "root";
@@ -14,45 +14,77 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Prepare and bind
- 
-$stmt = $conn->prepare("INSERT INTO senior (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIssue, picture, idPicture, signature, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("sssssssissssss", $idNumber, $firstName, $middleName, $surname, $suffix, $address, $dob, $age, $sex, $dateIssue, $picture, $idPicture, $signature, $password);
+//THE KEY FOR ENCRYPTION AND DECRYPTION
+$key = 'qkwjdiw239&&jdafweihbrhnan&^%$ggdnawhd4njshjwuuO';
+//ENCRYPT FUNCTION
+function encryptthis($data, $key) {
+    $encryption_key = base64_decode($key);
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+    $encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
+    return base64_encode($encrypted . '::' . $iv);
+}
 
-// Set parameters and execute
-$idNumber = encryptthis($_POST['idNumber'], $key);
-$firstName = encryptthis($_POST['firstName'], $key);
-$middleName = encryptthis($_POST['middleName'], $key);
-$surname = encryptthis($_POST['surname'], $key);
-$suffix = encryptthis($_POST['suffix'], $key);
-$address = encryptthis($_POST['address'], $key);
-$dob = encryptthis($_POST['dob'], $key);
-$age = encryptthis($_POST['age'], $key);
-$sex = encryptthis($_POST['sex'], $key);
-$dateIssue = encryptthis($_POST['dateIssue'], $key);
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hash the password
+// Check if form is submitted
+if(isset($_POST['submit'])){
 
-// Handle file uploads
-$target_dir = "uploads/";
-$picture = $target_dir . basename($_FILES["picture"]["name"]);
-$idPicture = $target_dir . basename($_FILES["idPicture"]["name"]);
-$signature = $target_dir . basename($_FILES["signature"]["name"]);
+    //GET POST VARIABLES
+    $idNumber = $_POST['idNumber'];
+    $firstName = $_POST['firstName'];
+    $middleName = $_POST['middleName'];
 
-// Check if files were uploaded successfully
-if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
-    move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
-    move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
-
-    // Execute statement
+    //THE ENCRYPTION PROCESS
+    $idNumberEncrypted = encryptthis($idNumber, $key);
+    $firstNameEncrypted = encryptthis($firstName, $key);
+    $middleNameEncrypted = encryptthis($middleName, $key);
+    //INSERT INTO DATABASE
+    $stmt = $conn->prepare("INSERT INTO encryp (idNumber, firstName, middleName) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted);
     if ($stmt->execute()) {
         echo "New record created successfully";
     } else {
         echo "Error: " . $stmt->error;
     }
+    $stmt->close();
+    $conn->close();
 } else {
-    echo "Sorry, there was an error uploading your files.";
+    echo "Form not submitted.";
 }
-
-$stmt->close();
-$conn->close();
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insert Data Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+</head>
+<body>
+<div class="jumbotron"><h1>Insert Data Form</h1></div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div class="well">
+                <h2>Our Form</h2>
+                <!-- FORM FOR OUR EXAMPLE -->
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="idNumber">ID Number</label>
+                        <input type="text" class="form-control" name="idNumber" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fistName">Fist Name</label>
+                        <input type="text" class="form-control" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="middleName">Middle Name</label>
+                        <input type="text" class="form-control" name="middleName" required>
+                    </div>
+                    <input type="submit" name="submit" class="btn btn-success btn-lg" value="submit">
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+</div>
+</body>
+</html>
