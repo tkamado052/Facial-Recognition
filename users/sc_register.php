@@ -12,6 +12,7 @@ if (isset($_POST['submit'])) {
     $surname = $_POST['surname'];
     $suffix = $_POST['suffix'];
     $address = $_POST['address'];
+    $barangay = $_POST['barangay'];
     $dob = $_POST['dob'];
     $age = $_POST['age'];
     $sex = $_POST['sex'];
@@ -25,6 +26,7 @@ if (isset($_POST['submit'])) {
     $surnameEncrypted = encryptthis($surname, $key);
     $suffixEncrypted = encryptthis($suffix, $key);
     $addressEncrypted = encryptthis($address, $key);
+    $barangayEncrypted = encryptthis($barangay, $key);
     $dobEncrypted = encryptthis($dob, $key);
     $ageEncrypted = encryptthis($age, $key);
     $sexEncrypted = encryptthis($sex, $key);
@@ -105,6 +107,15 @@ $conn->close();
                     <div class="column">
                         <label for="address">*Address</label>
                         <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="column">
+                        <label for="barangay">*Barangay</label>
+                        <select id="barangay" name="barangay" required>
+                            <option value="blank"> </option>
+                            <option value="tanzaUno"> Tanza Uno </option>
+                            <option value="tanzaDos"> Tanza Dos </option>
+                            <option value="tangos"> Tangos</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
