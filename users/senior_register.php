@@ -1,6 +1,6 @@
 <?php
-require '../admin/encryption_functions.php';
-require '../admin/dbconfig.php';
+require '../includes/encryption_functions.php';
+require '../includes/dbconfig.php';
 
 // Check if form is submitted
 if (isset($_POST['submit'])) {
