@@ -1,30 +1,10 @@
 <?php
-date_default_timezone_set('America/New_York');
+require '../admin/encryption_functions.php';
+require '../admin/dbconfig.php';
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "facial-recognition";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-$key = 'qkwjdiw239&&jdafweihbrhnan&^%$ggdnawhd4njshjwuuO';
-
-function encryptthis($data, $key) {
-    $encryption_key = base64_decode($key);
-    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-    $encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
-    return base64_encode($encrypted . '::' . $iv);
-}
-
-$message = "";
-
-
+// Check if form is submitted
 if (isset($_POST['submit'])) {
-
+    // Get POST variables
     $idNumber = $_POST['idNumber'];
     $dissability = $_POST['dissability'];
     $firstName = $_POST['firstName'];
@@ -32,55 +12,53 @@ if (isset($_POST['submit'])) {
     $surname = $_POST['surname'];
     $suffix = $_POST['suffix'];
     $address = $_POST['address'];
-    $barangay = $_POST['barangay'];
     $dob = $_POST['dob'];
     $age = $_POST['age'];
     $sex = $_POST['sex'];
-    $dateIssue = $_POST['dateIssue'];
-    $password = $_POST['password'];
-    $parent = $_POST['parent'];
+    $dateIssue = $_POST['dateIdissue'];
+    $guardian = $_POST['guardian'];
     $contact = $_POST['contact'];
+    $password = $_POST['password'];
 
+    // Encryption process
+    $idNumberEncrypted = encryptthis($idNumber, $key);
+    $dissabilityEncrypted = encryptthis($dissability, $key);
+    $firstNameEncrypted = encryptthis($firstName, $key);
+    $middleNameEncrypted = encryptthis($middleName, $key);
+    $surnameEncrypted = encryptthis($surname, $key);
+    $suffixEncrypted = encryptthis($suffix, $key);
+    $addressEncrypted = encryptthis($address, $key);
+    $dobEncrypted = encryptthis($dob, $key);
+    $ageEncrypted = encryptthis($age, $key);
+    $sexEncrypted = encryptthis($sex, $key);
+    $dateIDIssueEncrypted = encryptthis($dateIssue, $key);
+    $guardianEncrypted = encryptthis($guardian, $key);
+    $contactEncrypted = encryptthis($contact, $key);
+    $passwordEncrypted = password_hash($password, PASSWORD_DEFAULT);
 
-$idNumberEncrypted = encryptthis($idNumber, $key);
-$disabilityEncrypted = encryptthis($dissability, $key);
-$firstNameEncrypted = encryptthis($firstName, $key);
-$middleNameEncrypted = encryptthis($middleName, $key);
-$surnameEncrypted = encryptthis($surname, $key);
-$suffixEncrypted = encryptthis($suffix, $key);
-$addressEncrypted = encryptthis($address, $key);
-$barangayEncrypted = encryptthis($barangay, $key);
-$dobEncrypted = encryptthis($dob, $key);
-$ageEncrypted = encryptthis($age, $key);
-$sexEncrypted = encryptthis($sex, $key);
-$dateIDIssueEncrypted = encryptthis($dateIssue, $key);
-$parentEncrypted = encryptthis($parent, $key);
-$contactEncrypted = encryptthis($idcontact, $key);
-$passwordEncrypted = password_hash($password, PASSWORD_DEFAULT);
+    // Handle file uploads
+    $target_dir = "uploads/";
+    $picture = $target_dir . basename($_FILES["picture"]["name"]);
+    $idPicture = $target_dir . basename($_FILES["idPicture"]["name"]);
+    $signature = $target_dir . basename($_FILES["signature"]["name"]);
 
+    if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
+        move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
+        move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
-$target_dir = "uploads/";
-$picture = $target_dir . basename($_FILES["picture"]["name"]);
-$idPicture = $target_dir . basename($_FILES["idPicture"]["name"]);
-$signature = $target_dir . basename($_FILES["signature"]["name"]);
+        // Insert into database
+        $stmt = $conn->prepare("INSERT INTO pwddb (idNumber, dissability, firstName, middleName, surname, suffix, address, dob, age, sex, dateIssue, picture, idPicture, signature, guardian, contact, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssssssssssssss", $idNumberEncrypted, $dissabilityEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature,$guardianEncrypted, $contactEncrypted, $passwordEncrypted);
 
-if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
-    move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
-    move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
+        if ($stmt->execute()) {
+            $message = "Registration complete!";
+        } else {
+            $message = "Error: " . $stmt->error;
+        }
 
-
-    $stmt = $conn->prepare("INSERT INTO senior (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIssue, picture, idPicture, signature, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature, $passwordEncrypted);
-
-    if ($stmt->execute()) {
-        $message = "Registration complete!";
+        $stmt->close();
     } else {
-        $message = "Error: " . $stmt->error;
-    }
-
-    $stmt->close();
-    } else {
-    $message = "Sorry, there was an error uploading your files.";
+        $message = "Sorry, there was an error uploading your files.";
     }
 }
 
@@ -95,15 +73,15 @@ $conn->close();
     <title>Member Portal Account Creation</title>
     <link rel="stylesheet" href="../style/seniorreg.css">
     <script src="../js/script.js" defer></script>
+   
 </head>
 <body>
     <div class="container">
         <h2>PWD Account Registration</h2>
         <p>Fields with * are required.</p>
-        <form id="registrationForm" action="register.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form id="registrationForm" action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <fieldset>
                 <legend>Basic Information</legend>
-                <!-- Basic Information Fields -->
                 <div class="row">
                     <div class="column">
                         <label for="idNumber">*ID Number</label>
@@ -148,15 +126,6 @@ $conn->close();
                         <label for="address">*Address</label>
                         <input type="text" id="address" name="address" required>
                     </div>
-                    <div class="column">
-                        <label for="barangay">*Barangay</label>
-                        <select id="barangay" name="barangay" required>
-                            <option value="blank"> </option>
-                            <option value="tanzaUno"> Tanza Uno </option>
-                            <option value="tanzaDos"> Tanza Dos </option>
-                            <option value="tangos"> Tangos</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="column">
@@ -169,29 +138,30 @@ $conn->close();
                     </div>
                     <div class="column">
                         <label for="sex">*Sex</label>
-                        <select id="sex" name="sex" required>
+                        <select name="sex" id="sex">
                         <option value="blank"> </option>
-                            <option value="M">Male</option>
-                            <option value="F">Female</option>
-                            <option value="None">Would rather not disclose</option>
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+                            <option value="others">others</option>
                         </select>
                     </div>
                     <div class="column">
-                        <label for="dateIssue">*Date ID Issue</label>
-                        <input type="date" id="dateIssue" name="dateIssue" required>
+                        <label for="dateIdissue">*Date ID Issue</label>
+                        <input type="date" id="dateIdissue" name="dateIdissue" required>
                     </div>
                 </div>
                 <legend>In Case of Emergency</legend>
                 <div class="row">
                     <div class="column">
-                        <label for="parent">*Parent/Guardian</label>
-                        <input type="text" id="parent" name="parent" required>
+                        <label for="guardian">*Guardian</label>
+                        <input type="text" id="guardian" name="guardian" required>
                     </div>
                     <div class="column">
                         <label for="contact">*Contact Number</label>
                         <input type="tel" id="contact" name="contact" pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}" required>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="column">
                         <label for="picture">*Upload Picture</label>
@@ -232,9 +202,30 @@ $conn->close();
                     </div>
                 </div>
             </fieldset>
-        
-            <button type="submit">Register</button>
+
+            <button type="submit" name="submit">Register</button>
         </form>
+        <div id="popup" class="popup">
+            <h3><?php echo $message; ?></h3>
+            <button onclick="closePopup()">OK</button>
+        </div>
     </div>
+
+    <script>
+        // Show the popup if message is set
+        window.onload = function() {
+            const message = "<?php echo $message; ?>";
+            if (message) {
+                const popup = document.getElementById('popup');
+                popup.classList.add('show');
+            }
+        };
+
+        // Close the popup
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            popup.classList.remove('show');
+        }
+    </script>
 </body>
 </html>
