@@ -1,27 +1,6 @@
 <?php
-date_default_timezone_set('America/New_York');
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "facial-recognition";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-$key = 'qkwjdiw239&&jdafweihbrhnan&^%$ggdnawhd4njshjwuuO';
-
-function encryptthis($data, $key) {
-    $encryption_key = base64_decode($key);
-    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-    $encrypted = openssl_encrypt($data, 'aes-256-cbc', $encryption_key, 0, $iv);
-    return base64_encode($encrypted . '::' . $iv);
-}
-
-$message = "";
-
+require '../admin/encryption_functions.php';
+require '../admin/dbconfig.php';
 
 if (isset($_POST['submit'])) {
 
@@ -60,6 +39,7 @@ $dateIDIssueEncrypted = encryptthis($dateIssue, $key);
 $childfirstNameEncrypted = encryptthis($CfirstName, $key);
 $childmiddleNameEncrypted = encryptthis($CmiddleName, $key);
 $childsurnameEncrypted = encryptthis($Csurname, $key);
+$childsuffixEncrypted = encryptthis($Csuffix, $key);
 $childdobEncrypted = encryptthis($Cdob, $key);
 $childageEncrypted = encryptthis($Cage, $key);
 $childsexEncrypted = encryptthis($Csex, $key);
@@ -76,8 +56,32 @@ if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
     move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
 
-    $stmt = $conn->prepare("INSERT INTO senior (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIssue, picture, idPicture, signature, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature, $passwordEncrypted);
+    $stmt = $conn->prepare("INSERT INTO spdb (idNumber, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIssue,CfirstName, CmiddleName, Csurname, Csuffix, cdob, cage, csex, password, picture, idPicture, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?, ?, ?)");
+    $stmt->bind_param("ssssssssssssssssssssss", 
+    $idNumberEncrypted, 
+    $firstNameEncrypted, 
+    $middleNameEncrypted, 
+    $surnameEncrypted, 
+    $suffixEncrypted, 
+    $addressEncrypted, 
+    $barangayEncrypted, 
+    $dobEncrypted, 
+    $ageEncrypted, 
+    $sexEncrypted, 
+    $dateIDIssueEncrypted, 
+    $childfirstNameEncrypted, 
+    $childmiddleNameEncrypted, 
+    $childsurnameEncrypted, 
+    $childsuffixEncrypted, 
+    $childdobEncrypted, 
+    $childageEncrypted, 
+    $childsexEncrypted,
+    $passwordEncrypted,
+    $picture,
+    $idPicture, 
+    $signature
+    );
+
 
     if ($stmt->execute()) {
         $message = "Registration complete!";
@@ -107,7 +111,7 @@ $conn->close();
 <div class="container">
         <h2>Solo Parents Account Registration</h2>
         <p>Fields with * are required.</p>
-        <form id="registrationForm" action="register.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form id="registrationForm" action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <fieldset>
                 <legend>Basic Information</legend>
                 <!-- Basic Information Fields -->
@@ -246,9 +250,30 @@ $conn->close();
                     </div>
                 </div>
             </fieldset>
-        
-            <button type="submit">Register</button>
+            <button type="submit" name="submit">Register</button>
         </form>
     </div>
+      <div id="popup" class="popup">
+            <h3><?php echo $message; ?></h3>
+            <button onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Show the popup if message is set
+        window.onload = function() {
+            const message = "<?php echo $message; ?>";
+            if (message) {
+                const popup = document.getElementById('popup');
+                popup.classList.add('show');
+            }
+        };
+
+        // Close the popup
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            popup.classList.remove('show');
+        }
+    </script>
 </body>
 </html>

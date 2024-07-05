@@ -68,10 +68,12 @@ label {
     margin-bottom: 8px;
     color: #2a52be;
 }
+
 #barangay,
 #contact,
 #disability,
 #sex, 
+input[type="tel"],
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -88,6 +90,8 @@ input[type="file"] {
     transition: border-color 0.3s ease;
 }
 
+
+input[type="tel"]:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus,
