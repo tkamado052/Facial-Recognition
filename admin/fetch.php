@@ -1,28 +1,8 @@
 <?php
-date_default_timezone_set('America/New_York');
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "facial-recognition";
+require 'encryption_functions.php';
+require 'dbconfig.php';
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// THE KEY FOR ENCRYPTION AND DECRYPTION
-$key = 'qkwjdiw239&&jdafweihbrhnan&^%$ggdnawhd4njshjwuuO';
-
-// DECRYPT FUNCTION
-function decryptthis($data, $key) {
-    $encryption_key = base64_decode($key);
-    list($encrypted_data, $iv) = array_pad(explode('::', base64_decode($data), 2), 2, null);
-    return openssl_decrypt($encrypted_data, 'aes-256-cbc', $encryption_key, 0, $iv);
-}
 
 $sql = "SELECT * FROM seniordb";
 $result = $conn->query($sql);
