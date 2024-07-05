@@ -159,7 +159,12 @@ $conn->close();
                     </div>
                     <div class="column">
                         <label for="sex">*Sex</label>
-                        <input type="text" id="sex" name="sex" required>
+                        <select name="sex" id="sex">
+                        <option value="blank"> </option>
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+                            <option value="others">others</option>
+                        </select>
                     </div>
                     <div class="column">
                         <label for="dateIssue">*Date ID Issue</label>

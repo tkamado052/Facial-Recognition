@@ -6,17 +6,13 @@ $username = "root";
 $password = "";
 $dbname = "facial-recognition";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
-//THE KEY FOR ENCRYPTION AND DECRYPTION
 $key = 'qkwjdiw239&&jdafweihbrhnan&^%$ggdnawhd4njshjwuuO';
-//ENCRYPT FUNCTION
+
 function encryptthis($data, $key) {
     $encryption_key = base64_decode($key);
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
@@ -24,11 +20,13 @@ function encryptthis($data, $key) {
     return base64_encode($encrypted . '::' . $iv);
 }
 
-// Check if form is submitted
-if(isset($_POST['submit'])){
+$message = "";
 
-    //GET POST VARIABLES
+
+if (isset($_POST['submit'])) {
+
     $idNumber = $_POST['idNumber'];
+    $dissability = $_POST['dissability'];
     $firstName = $_POST['firstName'];
     $middleName = $_POST['middleName'];
     $surname = $_POST['surname'];
@@ -37,56 +35,92 @@ if(isset($_POST['submit'])){
     $dob = $_POST['dob'];
     $age = $_POST['age'];
     $sex = $_POST['sex'];
-    $dateIdissue = $_POST['dateIdissue'];
+    $dateIssue = $_POST['dateIssue'];
+    $password = $_POST['password'];
+    $parent = $_POST['parent'];
+    $contact = $_POST['contact'];
 
-    //THE ENCRYPTION PROCESS
-    $idNumberEncrypted = encryptthis($idNumber, $key);
-    $firstNameEncrypted = encryptthis($firstName, $key);
-    $middleNameEncrypted = encryptthis($middleName, $key);
-    $surnameEncrypted = encryptthis($surname, $key);
-    $suffixEncrypted = encryptthis($suffix, $key);
-    $addressEncrypted = encryptthis($address, $key);
-    $dobEncrypted = encryptthis($dob, $key);
-    $ageEncrypted = encryptthis($age, $key);
-    $sexEncrypted = encryptthis($sex, $key);
-    $dateIdissueEncrypted = encryptthis($dateIdissue, $key);
 
-    //INSERT INTO DATABASE
-    $stmt = $conn->prepare("INSERT INTO seniordb (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIdissue)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIdissueEncrypted);
+$idNumberEncrypted = encryptthis($idNumber, $key);
+$disabilityEncrypted = encryptthis($dissability, $key);
+$firstNameEncrypted = encryptthis($firstName, $key);
+$middleNameEncrypted = encryptthis($middleName, $key);
+$surnameEncrypted = encryptthis($surname, $key);
+$suffixEncrypted = encryptthis($suffix, $key);
+$addressEncrypted = encryptthis($address, $key);
+$dobEncrypted = encryptthis($dob, $key);
+$ageEncrypted = encryptthis($age, $key);
+$sexEncrypted = encryptthis($sex, $key);
+$dateIDIssueEncrypted = encryptthis($dateIssue, $key);
+$parentEncrypted = encryptthis($parent, $key);
+$contactEncrypted = encryptthis($idcontact, $key);
+$passwordEncrypted = password_hash($password, PASSWORD_DEFAULT);
+
+
+$target_dir = "uploads/";
+$picture = $target_dir . basename($_FILES["picture"]["name"]);
+$idPicture = $target_dir . basename($_FILES["idPicture"]["name"]);
+$signature = $target_dir . basename($_FILES["signature"]["name"]);
+
+if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
+    move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
+    move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
+
+
+    $stmt = $conn->prepare("INSERT INTO senior (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIssue, picture, idPicture, signature, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature, $passwordEncrypted);
+
     if ($stmt->execute()) {
-        echo "New record created successfully";
+        $message = "Registration complete!";
     } else {
-        echo "Error: " . $stmt->error;
+        $message = "Error: " . $stmt->error;
     }
+
     $stmt->close();
-    $conn->close();
-} else {
-    echo "Form not submitted.";
+    } else {
+    $message = "Sorry, there was an error uploading your files.";
+    }
 }
+
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Portal Account Creation</title>
-    <link rel="stylesheet" href="../style/regStyles.css">
+    <link rel="stylesheet" href="../style/seniorreg.css">
     <script src="../js/script.js" defer></script>
-   
 </head>
 <body>
     <div class="container">
-        <h2>Senior Citizens Account Registration</h2>
+        <h2>PWD Account Registration</h2>
         <p>Fields with * are required.</p>
-        <form id="registrationForm" action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form id="registrationForm" action="register.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <fieldset>
                 <legend>Basic Information</legend>
+                <!-- Basic Information Fields -->
                 <div class="row">
                     <div class="column">
                         <label for="idNumber">*ID Number</label>
                         <input type="text" id="idNumber" name="idNumber" required>
+                    </div>
+                    <div class="column">
+                        <label for="disability">*Type of Disability</label>
+                        <select id="disability" name="dissability" required>
+                            <option value="blank"> </option>
+                            <option value="visualy"> Visually Impared </option>
+                            <option value="hearing"> Hearing Impared </option>
+                            <option value="orthopedic"> Visually Impared </option>
+                            <option value="others"> Cleft Palate, Harelip</option>
+                            <option value="imp"> Improved Mental Patients </option>
+                            <option value="mr"> Mentally Retarted </option>
+                            <option value="autism"> Autism </option>
+                            <option value="deficit"> Attention Deficit Disorder</option>
+                            <option value="hyperactive"> Attention Deficit Hyperactive Disorder </option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
@@ -124,11 +158,27 @@ if(isset($_POST['submit'])){
                     </div>
                     <div class="column">
                         <label for="sex">*Sex</label>
-                        <input type="text" id="sex" name="sex" required>
+                        <select id="sex" name="sex" required>
+                        <option value="blank"> </option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="None">Would rather not disclose</option>
+                        </select>
                     </div>
                     <div class="column">
-                        <label for="dateIdissue">*Date ID Issue</label>
-                        <input type="date" id="dateIdissue" name="dateIdissue" required>
+                        <label for="dateIssue">*Date ID Issue</label>
+                        <input type="date" id="dateIssue" name="dateIssue" required>
+                    </div>
+                </div>
+                <legend>In Case of Emergency</legend>
+                <div class="row">
+                    <div class="column">
+                        <label for="parent">*Parent/Guardian</label>
+                        <input type="text" id="parent" name="parent" required>
+                    </div>
+                    <div class="column">
+                        <label for="contact">*Contact Number</label>
+                        <input type="tel" id="contact" name="contact" pattern="[0-9]{4}-[0-9]{3}-[0-9]{4}" required>
                     </div>
                 </div>
                 <div class="row">
@@ -171,30 +221,9 @@ if(isset($_POST['submit'])){
                     </div>
                 </div>
             </fieldset>
-
-            <button type="submit" name="submit">Register</button>
+        
+            <button type="submit">Register</button>
         </form>
-        <div id="popup" class="popup">
-            <h3><?php echo $message; ?></h3>
-            <button onclick="closePopup()">OK</button>
-        </div>
     </div>
-
-    <script>
-        // Show the popup if message is set
-        window.onload = function() {
-            const message = "<?php echo $message; ?>";
-            if (message) {
-                const popup = document.getElementById('popup');
-                popup.classList.add('show');
-            }
-        };
-
-        // Close the popup
-        function closePopup() {
-            const popup = document.getElementById('popup');
-            popup.classList.remove('show');
-        }
-    </script>
 </body>
 </html>

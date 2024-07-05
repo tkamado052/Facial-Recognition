@@ -118,6 +118,7 @@ $conn->close();
                     <div class="column">
                         <label for="sex">*Sex</label>
                         <select name="sex" id="sex">
+                        <option value="blank"> </option>
                             <option value="male">male</option>
                             <option value="female">female</option>
                             <option value="others">others</option>
