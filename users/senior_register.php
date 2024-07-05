@@ -65,7 +65,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Portal Account Creation</title>
-    <link rel="stylesheet" href="../style/regStyles.css">
+    <link rel="stylesheet" href="../style/seniorreg.css">
     <script src="../js/script.js" defer></script>
    
 </head>
@@ -117,7 +117,11 @@ $conn->close();
                     </div>
                     <div class="column">
                         <label for="sex">*Sex</label>
-                        <input type="text" id="sex" name="sex" required>
+                        <select name="sex" id="sex">
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+                            <option value="others">others</option>
+                        </select>
                     </div>
                     <div class="column">
                         <label for="dateIdissue">*Date ID Issue</label>

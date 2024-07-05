@@ -98,11 +98,11 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Portal Account Creation</title>
-    <link rel="stylesheet" href="../style/regStyles.css">
+    <link rel="stylesheet" href="../style/seniorreg.css">
     <script src="../js/script.js" defer></script>
 </head>
 <body>
-    <div class="container">
+<div class="container">
         <h2>Solo Parents Account Registration</h2>
         <p>Fields with * are required.</p>
         <form id="registrationForm" action="register.php" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
@@ -137,6 +137,15 @@ $conn->close();
                     <div class="column">
                         <label for="address">*Address</label>
                         <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="column">
+                        <label for="barangay">*Barangay</label>
+                        <select id="barangay" name="barangay" required>
+                            <option value="blank"> </option>
+                            <option value="tanzaUno"> Tanza Uno </option>
+                            <option value="tanzaDos"> Tanza Dos </option>
+                            <option value="tangos"> Tangos</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
