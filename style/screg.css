@@ -1,0 +1,224 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Container for the form */
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Jumbotron style */
+.jumbotron {
+    background-color: #e0eafc;
+    padding: 20px 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    animation: slideDown 1s ease-in-out;
+}
+
+/* Info message style */
+.info-message {
+    background-color: #e0f7ff;
+    border: 1px solid #bcdff1;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #007bff;
+    display: flex;
+    align-items: center;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.info-message::before {
+    content: "ℹ️";
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+/* Form group styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Label styles */
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Input styles */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Row and column styles */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+
+.column {
+    flex: 50%;
+    padding: 0 10px;
+}
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+/* Password requirements styles */
+.password-requirements {
+    background-color: #e0f7ff;
+    padding: 15px;
+    border: 1px solid #bcdff1;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.password-requirements p {
+    margin: 0 0 10px;
+    font-weight: bold;
+}
+
+.password-requirements ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.password-requirements li {
+    margin-bottom: 5px;
+}
+
+.password-requirements li.invalid {
+    color: red;
+}
+
+.password-requirements li.valid {
+    color: green;
+}
+
+.match-message {
+    font-size: 14px;
+    color: red;
+}
+
+/* Fieldset legend styles */
+fieldset {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-color: #8ecb8e;
+    animation: fadeIn 2s ease-in-out;
+}
+
+legend {
+    padding: 0 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Adding upper case and bottom border */
+fieldset legend {
+    border-bottom: 2px solid #8ecb8e;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Adjusting form layout to match the provided image */
+.form-layout {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-column {
+    flex: 1;
+    padding: 10px;
+    min-width: 300px;
+}
+
+/* Input and label styles for better alignment */
+.form-group input, .form-group select {
+    width: calc(100% - 22px);
+    padding: 10px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    display: block;
+}
+
+.well {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    animation: fadeIn 1s ease-in-out;
+}

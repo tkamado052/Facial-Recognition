@@ -1,7 +1,6 @@
 <?php
-require 'encryption.php';
-
-$message = "";
+require '../admin/encryption_functions.php';
+require '../admin/dbconfig.php';
 
 // Check if form is submitted
 if (isset($_POST['submit'])) {
@@ -16,7 +15,7 @@ if (isset($_POST['submit'])) {
     $dob = $_POST['dob'];
     $age = $_POST['age'];
     $sex = $_POST['sex'];
-    $dateIssue = $_POST['dateIssue'];
+    $dateIssue = $_POST['dateIdissue'];
     $password = $_POST['password'];
 
     // Encryption process
@@ -44,7 +43,7 @@ if (isset($_POST['submit'])) {
         move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
         // Insert into database
-        $stmt = $conn->prepare("INSERT INTO senior (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIssue, picture, idPicture, signature, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO seniordb (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIdissue, picture, idPicture, signature, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature, $passwordEncrypted);
 
         if ($stmt->execute()) {
@@ -132,8 +131,8 @@ $conn->close();
                         <input type="text" id="sex" name="sex" required>
                     </div>
                     <div class="column">
-                        <label for="dateIssue">*Date ID Issue</label>
-                        <input type="date" id="dateIssue" name="dateIssue" required>
+                        <label for="dateIdissue">*Date ID Issue</label>
+                        <input type="date" id="dateIdissue" name="dateIdissue" required>
                     </div>
                 </div>
                 <div class="row">
