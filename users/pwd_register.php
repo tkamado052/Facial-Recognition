@@ -93,7 +93,7 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Portal Account Creation</title>
-    <link rel="stylesheet" href="../style/regStyles.css">
+    <link rel="stylesheet" href="../style/seniorreg.css">
     <script src="../js/script.js" defer></script>
 </head>
 <body>
@@ -110,8 +110,8 @@ $conn->close();
                         <input type="text" id="idNumber" name="idNumber" required>
                     </div>
                     <div class="column">
-                        <label for="dissability">*Type of Dissability</label>
-                        <select id="dissability" name="dissability" required>
+                        <label for="disability">*Type of Disability</label>
+                        <select id="disability" name="dissability" required>
                             <option value="blank"> </option>
                             <option value="visualy"> Visually Impared </option>
                             <option value="hearing"> Hearing Impared </option>
@@ -169,7 +169,12 @@ $conn->close();
                     </div>
                     <div class="column">
                         <label for="sex">*Sex</label>
-                        <input type="text" id="sex" name="sex" required>
+                        <select id="sex" name="sex" required>
+                        <option value="blank"> </option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="None">Would rather not disclose</option>
+                        </select>
                     </div>
                     <div class="column">
                         <label for="dateIssue">*Date ID Issue</label>
