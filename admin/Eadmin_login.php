@@ -19,14 +19,14 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Portal Account Creation</title>
+    <title>Establishment Admin Log In Portal</title>
     <link rel="stylesheet" href="../style/regStyles.css">
     <script src="../js/script.js" defer></script>
    
 </head>
 <body>
     <div class="container">
-        <h2>Barangay Admin Log in</h2>
+        <h2>Establishment Admin Log in</h2>
         <div class="row">
              <div class="column">
                 <label for="eUserName">Username</label>
