@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 $conn->close();
 ?>
 
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">

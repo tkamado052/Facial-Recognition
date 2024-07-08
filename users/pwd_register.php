@@ -12,6 +12,7 @@ if (isset($_POST['submit'])) {
     $surname = $_POST['surname'];
     $suffix = $_POST['suffix'];
     $address = $_POST['address'];
+    $barangay = $_POST['barangay'];
     $dob = $_POST['dob'];
     $age = $_POST['age'];
     $sex = $_POST['sex'];
@@ -28,6 +29,7 @@ if (isset($_POST['submit'])) {
     $surnameEncrypted = encryptthis($surname, $key);
     $suffixEncrypted = encryptthis($suffix, $key);
     $addressEncrypted = encryptthis($address, $key);
+    $barangayEncrypted = encryptthis($barangay, $key);
     $dobEncrypted = encryptthis($dob, $key);
     $ageEncrypted = encryptthis($age, $key);
     $sexEncrypted = encryptthis($sex, $key);
@@ -47,8 +49,8 @@ if (isset($_POST['submit'])) {
         move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
         // Insert into database
-        $stmt = $conn->prepare("INSERT INTO pwddb (idNumber, dissability, firstName, middleName, surname, suffix, address, dob, age, sex, dateIssue, picture, idPicture, signature, guardian, contact, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssssssssssssss", $idNumberEncrypted, $dissabilityEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature,$guardianEncrypted, $contactEncrypted, $passwordEncrypted);
+        $stmt = $conn->prepare("INSERT INTO pwddb (idNumber, dissability, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIssue, picture, idPicture, signature, guardian, contact, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssssssssssss", $idNumberEncrypted, $dissabilityEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $barangayEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature,$guardianEncrypted, $contactEncrypted, $passwordEncrypted);
 
         if ($stmt->execute()) {
             $message = "Registration complete!";
@@ -125,6 +127,15 @@ $conn->close();
                     <div class="column">
                         <label for="address">*Address</label>
                         <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="column">
+                        <label for="barangay">*Barangay</label>
+                        <select id="barangay" name="barangay" required>
+                            <option value="blank"> </option>
+                            <option value="tanzaUno"> Tanza Uno </option>
+                            <option value="tanzaDos"> Tanza Dos </option>
+                            <option value="tangos"> Tangos</option>
+                        </select>
                     </div>
                 </div>
                 <div class="row">
