@@ -20,7 +20,7 @@ if ($conn->connect_error) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,
     initial-scale=1.0">
-    <title> finals </title>
+    <title> Barangay Tangos </title>
     <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
 </head>
