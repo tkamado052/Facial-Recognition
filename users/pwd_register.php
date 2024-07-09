@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
         move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
         // Insert into database
-        $stmt = $conn->prepare("INSERT INTO pwddb (idNumber, dissability, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIssue, picture, idPicture, signature, guardian, contact, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO pwddb (idNumber, dissability, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIdissue, picture, idPicture, signature, guardian, contact, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("ssssssssssssssssss", $idNumberEncrypted, $dissabilityEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $barangayEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature,$guardianEncrypted, $contactEncrypted, $passwordEncrypted);
 
         if ($stmt->execute()) {

@@ -1,10 +1,12 @@
 <?php
 
-require 'encryption_functions.php';
-require 'dbconfig.php';
+require '../includes/encryption_functions.php';
+require '../includes/dbconfig.php';
 
 
 $sql = "SELECT * FROM seniordb";
+$sql = "SELECT * FROM pwddb";
+$sql = "SELECT * FROM spdb";
 $result = $conn->query($sql);
 ?>
 

@@ -1,3 +1,11 @@
+<?php
+require '../includes/dbconfig.php';
+require '../includes/encryption_functions.php';
+
+
+
+?>
+ 
 <html lang="en">
 <head>
     <meta charset="UTF-8">

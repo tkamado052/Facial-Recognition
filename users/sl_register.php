@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
     $dob = $_POST['dob'];
     $age = $_POST['age'];
     $sex = $_POST['sex'];
-    $dateIssue = $_POST['dateIssue'];
+    $dateIssue = $_POST['dateIdissue'];
     $CfirstName = $_POST['CfirstName'];
     $CmiddleName = $_POST['CmiddleName'];
     $Csurname = $_POST['Csurname'];
@@ -56,7 +56,7 @@ if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
     move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
 
-    $stmt = $conn->prepare("INSERT INTO spdb (idNumber, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIssue,CfirstName, CmiddleName, Csurname, Csuffix, cdob, cage, csex, password, picture, idPicture, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO spdb (idNumber, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIdissue,CfirstName, CmiddleName, Csurname, Csuffix, cdob, cage, csex, password, picture, idPicture, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?, ?, ?)");
     $stmt->bind_param("ssssssssssssssssssssss", 
     $idNumberEncrypted, 
     $firstNameEncrypted, 
@@ -174,7 +174,7 @@ $conn->close();
                     </div>
                     <div class="column">
                         <label for="dateIssue">*Date ID Issue</label>
-                        <input type="date" id="dateIssue" name="dateIssue" required>
+                        <input type="date" id="dateIdissue" name="dateIdissue" required>
                     </div>
                 </div>
                 <legend>Child Information</legend>
