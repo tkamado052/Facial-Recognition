@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style/brgyStyle.css">
+    <title>Barangay Tangos</title>
+    <link rel="stylesheet" href="../style/bgyStyle.css">
+    <script src="https://kit.fontawesome.com/0c1d2e938f.js" crossorigin="anonymous"></script></script>
 </head>
 <body>
-    <div class="header">
-        <div class="side-nav">
-            <ul>
-                <li><p>Barangay Tangos</p></li>
-            </ul>
-           <ul>
-            <li><img src="../images/graph-icon.png"><p>Graphs</p></li>
-            <li><img src="../images/pwd-icon.png"><p>PWDs</p></li>
-            <li><img src="../images/senior-icon.png"><p>Senior Citizens</p></li>
-            <li><img src="../images/sp-icon.png"><p>Solo Parents</p></li>
-           </ul>
-           <ul>
-            <li><img src="../images/logout.png"><p>Logout</p></li>
-           </ul>
-        </div>
+    <input type="checkbox" id="check">
+    <label for="check">
+        <i class="fas fa-bars" id="btn"></i>
+        <i class="fas fa-times" id="cancel"></i>
+    </label>
+    <div class="sidebar">
+        <header>Barangay Tangos</header>
+        <ul>
+            <li><a href="#">Graphs</a></li>
+            <li><a href="../tangos/tangospwd.php">PWDs</a></li>
+            <li><a href="../tangos/tangossenior.php">Senior Citizens</a></li>
+            <li><a href="../tangos/tangossp.php">Solo Parents</a></li>
+        </ul>
+        <ul>
+            <li><a href="#">Log Out</a></li>
+        </ul>
     </div>
-
+    <section></section>
 </body>
 </html>
