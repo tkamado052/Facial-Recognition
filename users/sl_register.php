@@ -47,17 +47,15 @@ $passwordEncrypted = password_hash($password, PASSWORD_DEFAULT);
 
 
 $target_dir = "uploads/";
-$picture = $target_dir . basename($_FILES["picture"]["name"]);
 $idPicture = $target_dir . basename($_FILES["idPicture"]["name"]);
 $signature = $target_dir . basename($_FILES["signature"]["name"]);
 
-if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
-    move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
+if (move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
     move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
 
-    $stmt = $conn->prepare("INSERT INTO spdb (idNumber, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIdissue,CfirstName, CmiddleName, Csurname, Csuffix, cdob, cage, csex, password, picture, idPicture, signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?, ?, ?)");
-    $stmt->bind_param("ssssssssssssssssssssss", 
+    $stmt = $conn->prepare("INSERT INTO spdb (idNumber, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIdissue,CfirstName, CmiddleName, Csurname, Csuffix, cdob, cage, csex, password, idPicture, signature) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?, ?, ?)");
+    $stmt->bind_param("sssssssssssssssssssss", 
     $idNumberEncrypted, 
     $firstNameEncrypted, 
     $middleNameEncrypted, 
@@ -77,23 +75,27 @@ if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
     $childageEncrypted, 
     $childsexEncrypted,
     $passwordEncrypted,
-    $picture,
     $idPicture, 
     $signature
     );
-
-
     if ($stmt->execute()) {
+        $id = $conn->insert_id;
         $message = "Registration complete!";
+        $username = $firstName;
+
+        // Redirect to capture.php
+        header("Location: capture.php?id=$id&username=$username");
+        exit();
     } else {
         $message = "Error: " . $stmt->error;
     }
 
     $stmt->close();
-    } else {
+} else {
     $message = "Sorry, there was an error uploading your files.";
-    }
 }
+}
+
 
 $conn->close();
 ?>
@@ -211,10 +213,6 @@ $conn->close();
                     </div>
                 </div>
                 <div class="row">
-                    <div class="column">
-                        <label for="picture">*Upload Picture</label>
-                        <input type="file" id="picture" name="picture" required>
-                    </div>
                     <div class="column">
                         <label for="idPicture">*Upload ID Picture</label>
                         <input type="file" id="idPicture" name="idPicture" required>

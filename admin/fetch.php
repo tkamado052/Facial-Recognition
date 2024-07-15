@@ -4,7 +4,7 @@ require '../includes/encryption_functions.php';
 require '../includes/dbconfig.php';
 
 
-$sql = "SELECT * FROM seniordb";
+$sql = "SELECT * FROM spdb";
 $result = $conn->query($sql);
 ?>
 
