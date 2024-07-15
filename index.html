@@ -13,9 +13,7 @@
             <h3>Logo Here</h3>
         </div>
         <div class="loginHolder">
-            <a href="users/loginpage.php" class="btn btn-lg btn-primary">
-                Login
-            </a>
+          <p><a class="btn btn-lg btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></p>
         </div>
     </header>
     <!-- START SLIDER-->
@@ -79,6 +77,23 @@
             <p><a class="btn btn-lg btn-primary mod" href="users/pwd_register.php">Register as PWD</a></p>
             <p><a class="btn btn-lg btn-primary mod" href="users/senior_register.php">Register as Senior Citizen</a></p>
             <p><a class="btn btn-lg btn-primary mod" href="users/sl_register.php">Register as Solo Parent</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Modal Start-->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="exampleModalLabel">Login As:</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><a class="btn btn-lg btn-primary mod" href="users/pwd_register.php">PWD</a></p>
+            <p><a class="btn btn-lg btn-primary mod" href="users/senior_register.php">Senior Citizen</a></p>
+            <p><a class="btn btn-lg btn-primary mod" href="users/sl_register.php">Solo Parent</a></p>
           </div>
         </div>
       </div>

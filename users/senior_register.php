@@ -2,6 +2,8 @@
 require '../includes/encryption_functions.php';
 require '../includes/dbconfig.php';
 
+$message = "";
+
 // Check if form is submitted
 if (isset($_POST['submit'])) {
     // Get POST variables
@@ -34,20 +36,24 @@ if (isset($_POST['submit'])) {
 
     // Handle file uploads
     $target_dir = "uploads/";
-    $picture = $target_dir . basename($_FILES["picture"]["name"]);
     $idPicture = $target_dir . basename($_FILES["idPicture"]["name"]);
     $signature = $target_dir . basename($_FILES["signature"]["name"]);
 
-    if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
-        move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
+    if (move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
         move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
         // Insert into database
-        $stmt = $conn->prepare("INSERT INTO seniordb (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIdissue, picture, idPicture, signature, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature, $passwordEncrypted);
+        $stmt = $conn->prepare("INSERT INTO seniordb (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIdissue, idPicture, signature, password) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $idPicture, $signature, $passwordEncrypted);
 
         if ($stmt->execute()) {
+            $id = $conn->insert_id;
             $message = "Registration complete!";
+            $username = $firstName;
+
+            // Redirect to capture.php
+            header("Location: capture.php?id=$id&username=$username");
+            exit();
         } else {
             $message = "Error: " . $stmt->error;
         }
@@ -69,7 +75,6 @@ $conn->close();
     <title>Member Portal Account Creation</title>
     <link rel="stylesheet" href="../style/seniorreg.css">
     <script src="../js/script.js" defer></script>
-   
 </head>
 <body>
     <div class="container">
@@ -141,10 +146,6 @@ $conn->close();
                     </div>
                 </div>
                 <div class="row">
-                    <div class="column">
-                        <label for="picture">*Upload Picture</label>
-                        <input type="file" id="picture" name="picture" required>
-                    </div>
                     <div class="column">
                         <label for="idPicture">*Upload ID Picture</label>
                         <input type="file" id="idPicture" name="idPicture" required>

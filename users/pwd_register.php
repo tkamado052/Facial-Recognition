@@ -40,20 +40,24 @@ if (isset($_POST['submit'])) {
 
     // Handle file uploads
     $target_dir = "uploads/";
-    $picture = $target_dir . basename($_FILES["picture"]["name"]);
     $idPicture = $target_dir . basename($_FILES["idPicture"]["name"]);
     $signature = $target_dir . basename($_FILES["signature"]["name"]);
 
-    if (move_uploaded_file($_FILES["picture"]["tmp_name"], $picture) &&
-        move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
+    if (move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
         move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
         // Insert into database
-        $stmt = $conn->prepare("INSERT INTO pwddb (idNumber, dissability, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIdissue, picture, idPicture, signature, guardian, contact, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssssssssssssssss", $idNumberEncrypted, $dissabilityEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $barangayEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $picture, $idPicture, $signature,$guardianEncrypted, $contactEncrypted, $passwordEncrypted);
+        $stmt = $conn->prepare("INSERT INTO pwddb (idNumber, dissability, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIdissue, idPicture, signature, guardian, contact, password) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssssssssssssss", $idNumberEncrypted, $dissabilityEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $barangayEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $idPicture, $signature,$guardianEncrypted, $contactEncrypted, $passwordEncrypted);
 
         if ($stmt->execute()) {
+            $id = $conn->insert_id;
             $message = "Registration complete!";
+            $username = $firstName;
+
+            // Redirect to capture.php
+            header("Location: capture.php?id=$id&username=$username");
+            exit();
         } else {
             $message = "Error: " . $stmt->error;
         }
@@ -174,10 +178,6 @@ $conn->close();
                 </div>
 
                 <div class="row">
-                    <div class="column">
-                        <label for="picture">*Upload Picture</label>
-                        <input type="file" id="picture" name="picture" required>
-                    </div>
                     <div class="column">
                         <label for="idPicture">*Upload ID Picture</label>
                         <input type="file" id="idPicture" name="idPicture" required>
