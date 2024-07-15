@@ -31,7 +31,6 @@ $middleNameEncrypted = encryptthis($middleName, $key);
 $surnameEncrypted = encryptthis($surname, $key);
 $suffixEncrypted = encryptthis($suffix, $key);
 $addressEncrypted = encryptthis($address, $key);
-$barangayEncrypted = encryptthis($barangay, $key);
 $dobEncrypted = encryptthis($dob, $key);
 $ageEncrypted = encryptthis($age, $key);
 $sexEncrypted = encryptthis($sex, $key);
@@ -62,7 +61,7 @@ if (move_uploaded_file($_FILES["idPicture"]["tmp_name"], $idPicture) &&
     $surnameEncrypted, 
     $suffixEncrypted, 
     $addressEncrypted, 
-    $barangayEncrypted, 
+    $barangay, 
     $dobEncrypted, 
     $ageEncrypted, 
     $sexEncrypted, 

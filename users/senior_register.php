@@ -27,7 +27,6 @@ if (isset($_POST['submit'])) {
     $surnameEncrypted = encryptthis($surname, $key);
     $suffixEncrypted = encryptthis($suffix, $key);
     $addressEncrypted = encryptthis($address, $key);
-    $barangayEncrypted = encryptthis($barangay, $key);
     $dobEncrypted = encryptthis($dob, $key);
     $ageEncrypted = encryptthis($age, $key);
     $sexEncrypted = encryptthis($sex, $key);
@@ -43,8 +42,8 @@ if (isset($_POST['submit'])) {
         move_uploaded_file($_FILES["signature"]["tmp_name"], $signature)) {
 
         // Insert into database
-        $stmt = $conn->prepare("INSERT INTO seniordb (idNumber, firstName, middleName, surname, suffix, address, dob, age, sex, dateIdissue, idPicture, signature, password) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $idPicture, $signature, $passwordEncrypted);
+        $stmt = $conn->prepare("INSERT INTO seniordb (idNumber, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIdissue, idPicture, signature, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssssssss", $idNumberEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $barangay, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $idPicture, $signature, $passwordEncrypted);
 
         if ($stmt->execute()) {
             $id = $conn->insert_id;

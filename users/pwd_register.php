@@ -29,7 +29,6 @@ if (isset($_POST['submit'])) {
     $surnameEncrypted = encryptthis($surname, $key);
     $suffixEncrypted = encryptthis($suffix, $key);
     $addressEncrypted = encryptthis($address, $key);
-    $barangayEncrypted = encryptthis($barangay, $key);
     $dobEncrypted = encryptthis($dob, $key);
     $ageEncrypted = encryptthis($age, $key);
     $sexEncrypted = encryptthis($sex, $key);
@@ -48,7 +47,7 @@ if (isset($_POST['submit'])) {
 
         // Insert into database
         $stmt = $conn->prepare("INSERT INTO pwddb (idNumber, dissability, firstName, middleName, surname, suffix, address, barangay, dob, age, sex, dateIdissue, idPicture, signature, guardian, contact, password) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssssssssssssss", $idNumberEncrypted, $dissabilityEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $barangayEncrypted, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $idPicture, $signature,$guardianEncrypted, $contactEncrypted, $passwordEncrypted);
+        $stmt->bind_param("sssssssssssssssss", $idNumberEncrypted, $dissabilityEncrypted, $firstNameEncrypted, $middleNameEncrypted, $surnameEncrypted, $suffixEncrypted, $addressEncrypted, $barangay, $dobEncrypted, $ageEncrypted, $sexEncrypted, $dateIDIssueEncrypted, $idPicture, $signature,$guardianEncrypted, $contactEncrypted, $passwordEncrypted);
 
         if ($stmt->execute()) {
             $id = $conn->insert_id;

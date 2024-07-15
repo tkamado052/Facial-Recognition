@@ -8,13 +8,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes (less secure, for development only)
+CORS(app)  
 
 dataset_path = 'dataset/'
 if not os.path.exists(dataset_path):
     os.makedirs(dataset_path)
 
-# Load Haar cascade classifier for face detection (replace with your path if needed)
+# Load Haar cascade classifier for face detection
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 @app.route('/capture', methods=['POST'])
