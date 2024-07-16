@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Recognition Apps</title>
+</head>
+<body>
+    <h1>Select a Recognition App</h1>
+    <button onclick="startRecognition('pwd')">Start PWD Recognition</button>
+    <button onclick="startRecognition('senior')">Start Senior Recognition</button>
+    <button onclick="startRecognition('solo_parent')">Start Solo Parent Recognition</button>
+
+    <script>
+        function startRecognition(appType) {
+            fetch('/start_recognition', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ app_type: appType }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert('Failed to start recognition app');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
